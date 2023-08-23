@@ -1,15 +1,11 @@
-#include<iostream>
-#include<fstream>
-#include<vector>
-#include<limits>
-#include<stdio.h>
-#include<Windows.h>
-#include<chrono>
+#include<bits/stdc++.h>
 #include<conio.h>
+#include<Windows.h>
 using namespace std;
 
 int curr_score = 0;
 void CoutCentered(string);
+void CoutCentered(int);
 
 class Student{
     public:
@@ -72,62 +68,119 @@ void readFile(){
             }
         }
 
+        int maxtime = 10;
+        do{
+            // Extracted question with option and correct answer from file and stored in 'record' vector
+            system("CLS");
+            // TODO
+            // Change the color and do decorations here
+
+            setcolor(RED);
+            // cout << maxtime << '\n';
+			CoutCentered(maxtime);
+            setcolor(NORMAL);
+
+            cout << "Question " << record[0] << ") " << record[1] << "\n\n";
+
+            HANDLE console_color = GetStdHandle(STD_OUTPUT_HANDLE);
+            SetConsoleTextAttribute(console_color, 30);
+
+            cout << "1) " << record[2] << "\n\n";
+            cout << "2) " << record[3] << "\n\n";
+            cout << "3) " << record[4] << "\n\n";
+            cout << "4) " << record[5] << "\n\n";
+            SetConsoleTextAttribute(console_color, 7);
+            // Ask for answer
+
+            if(_kbhit()){
+                char ch = _getch();
+
+                // TODO: What if user entered invalid choice? Check for that case.
+
+                if(record[(ch-'0')+1] == record[6]){
+                    // Increment the score for correct answer
+                    curr_score += 10;
+                    setcolor(GREEN);
+                    CoutCentered("CORRECT ANSWER :)");
+                    _getch();
+                    setcolor(NORMAL);
+                    system("CLS");
+                    break;
+                }else{
+                    setcolor(RED);
+                    CoutCentered("Wrong Answer :(");
+                    _getch();   
+                    setcolor(NORMAL);
+                    system("CLS");
+                    // TODO: Show score screen now
+                    break;
+                }
+            }
+
+			Sleep(1000);
+			maxtime--;
+        }while(maxtime!=0);
+
         // Extracted question with option and correct answer from file and stored in 'record' vector
-        system("CLS");
+        // system("CLS");
         // TODO
         // Change the color and do decorations here
-        cout << "Question " << record[0] << ") " << record[1] << '\n';
+        // cout << "Question " << record[0] << ") " << record[1] << '\n';
 
-        HANDLE console_color = GetStdHandle(STD_OUTPUT_HANDLE);
-        SetConsoleTextAttribute(console_color, 30);
+        // HANDLE console_color = GetStdHandle(STD_OUTPUT_HANDLE);
+        // SetConsoleTextAttribute(console_color, 30);
 
-        cout << "1) " << record[2] << '\n';
-        cout << "2) " << record[3] << '\n';
-        cout << "3) " << record[4] << '\n';
-        cout << "4) " << record[5] << '\n';
-        SetConsoleTextAttribute(console_color, 7);
+        // cout << "1) " << record[2] << '\n';
+        // cout << "2) " << record[3] << '\n';
+        // cout << "3) " << record[4] << '\n';
+        // cout << "4) " << record[5] << '\n';
+        // SetConsoleTextAttribute(console_color, 7);
         // Ask for answer
-        int ch; ch = 0;
-        while(ch < 1 || ch > 4){
-            cout << "Answer: ";
-            cin >> ch;
-            if(ch < 1 || ch > 4){
-                setcolor(YELLOW);
-                CoutCentered("Invalid choice!!\nChoice must be between 1 to 4");
-                // cout << "Invalid choice!!\nChoice must be between 1 to 4\n";
-                setcolor(NORMAL);
-                system("PAUSE");
-                system("CLS");
-                // TODO
-                // Change the color and do decorations here
-                cout << "Question " << record[0] << ") " << record[1] << '\n';
-                cout << "1) " << record[2] << '\n';
-                cout << "2) " << record[3] << '\n';
-                cout << "3) " << record[4] << '\n';
-                cout << "4) " << record[5] << '\n';
-            }
-        }
-        if(record[ch+1] == record[6]){
-            // Increment the score for correct answer
-            curr_score += 10;
-            setcolor(GREEN);
-            CoutCentered("CORRECT ANSWER :)");
-            _getch();
-            setcolor(NORMAL);
-            system("CLS");
-        }else{
-            setcolor(RED);
-            CoutCentered("Wrong Answer :(");
-            _getch();   
-            setcolor(NORMAL);
-            system("CLS");
-            // TODO: Show score screen now
-            break;
-        }
+        // int ch; ch = 0;
+        // while(ch < 1 || ch > 4){
+        //     cout << "Answer: ";
+        //     cin >> ch;
+        //     if(ch < 1 || ch > 4){
+        //         setcolor(YELLOW);
+        //         CoutCentered("Invalid choice!!\nChoice must be between 1 to 4");
+        //         cout << "Invalid choice!!\nChoice must be between 1 to 4\n";
+        //         setcolor(NORMAL);
+        //         system("PAUSE");
+        //         system("CLS");
+        //         TODO
+        //         Change the color and do decorations here
+        //         cout << "Question " << record[0] << ") " << record[1] << '\n';
+        //         cout << "1) " << record[2] << '\n';
+        //         cout << "2) " << record[3] << '\n';
+        //         cout << "3) " << record[4] << '\n';
+        //         cout << "4) " << record[5] << '\n';
+        //     }
+        // }
+        // if(record[ch+1] == record[6]){
+        //     // Increment the score for correct answer
+        //     curr_score += 10;
+        //     setcolor(GREEN);
+        //     CoutCentered("CORRECT ANSWER :)");
+        //     _getch();
+        //     setcolor(NORMAL);
+        //     system("CLS");
+        // }else{
+        //     setcolor(RED);
+        //     CoutCentered("Wrong Answer :(");
+        //     _getch();   
+        //     setcolor(NORMAL);
+        //     system("CLS");
+        //     break;
+        // }
     }
+    
+    // TODO: Show score screen now
+    system("CLS");
+    CoutCentered("YOUR SCORE IS");
+    CoutCentered(curr_score);
 }
 
-void CoutCentered(std::string text) {
+void CoutCentered(string text) {
     // This function will only center the text if it is less than the length of the console!
     // Otherwise it will just display it on the console without centering it.
 
@@ -140,6 +193,25 @@ void CoutCentered(std::string text) {
         for (int i = 0; i < newpos; i++) std::cout << " "; // Prints the spaces
     }
     std::cout << text << std::endl; // Prints the text centered :]
+}
+
+// Overloading
+void CoutCentered(int n) {
+    // This function will only center the text if it is less than the length of the console!
+    // Otherwise it will just display it on the console without centering it.
+
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE); // Get the console handle.
+    PCONSOLE_SCREEN_BUFFER_INFO lpScreenInfo = new CONSOLE_SCREEN_BUFFER_INFO(); // Create a pointer to the Screen Info pointing to a temporal screen info.
+    GetConsoleScreenBufferInfo(hConsole, lpScreenInfo); // Saves the console screen info into the lpScreenInfo pointer.
+    COORD NewSBSize = lpScreenInfo->dwSize; // Gets the size of the screen
+    
+    int size = ceil(log10(n));
+
+    if (NewSBSize.X > size) {
+        int newpos = ((NewSBSize.X - size) / 2); // Calculate the number of spaces to center the specific text.
+        for (int i = 0; i < newpos; i++) std::cout << " "; // Prints the spaces
+    }
+    std::cout << n << std::endl; // Prints the text centered :]
 }
 
 int main(){
