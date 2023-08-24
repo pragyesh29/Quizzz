@@ -6,6 +6,7 @@ using namespace std;
 int curr_score = 0;
 void CoutCentered(string);
 void CoutCentered(int);
+void CoutCentered(string, int);
 
 class Student{
     public:
@@ -19,7 +20,9 @@ class Student{
 
     void inputDetails(){
         cout << "Enter Name : "; cin >> name;
+        system("CLS");
         cout << "Enter Roll Number : "; cin >> rollno;
+        system("CLS");
     }
 
     void showDetails(){
@@ -68,23 +71,22 @@ void readFile(){
             }
         }
 
-        int maxtime = 10;
+        int maxtime = stoi(record[7]);
         do{
             // Extracted question with option and correct answer from file and stored in 'record' vector
             system("CLS");
             // TODO
             // Change the color and do decorations here
 
+            cout << '\n';
             setcolor(RED);
-            // cout << maxtime << '\n';
 			CoutCentered(maxtime);
             setcolor(NORMAL);
 
             cout << "Question " << record[0] << ") " << record[1] << "\n\n";
 
             HANDLE console_color = GetStdHandle(STD_OUTPUT_HANDLE);
-            SetConsoleTextAttribute(console_color, 30);
-
+            SetConsoleTextAttribute(console_color, 15);
             cout << "1) " << record[2] << "\n\n";
             cout << "2) " << record[3] << "\n\n";
             cout << "3) " << record[4] << "\n\n";
@@ -99,85 +101,48 @@ void readFile(){
 
                 if(record[(ch-'0')+1] == record[6]){
                     // Increment the score for correct answer
-                    curr_score += 10;
+                    curr_score += stoi(record[8]);
                     setcolor(GREEN);
                     CoutCentered("CORRECT ANSWER :)");
-                    _getch();
                     setcolor(NORMAL);
+                    _getch();
                     system("CLS");
                     break;
                 }else{
                     setcolor(RED);
                     CoutCentered("Wrong Answer :(");
-                    _getch();   
                     setcolor(NORMAL);
+                    _getch();   
                     system("CLS");
-                    // TODO: Show score screen now
                     break;
                 }
             }
-
+            setcolor(PINK);
+            CoutCentered("Your current score is", curr_score);
+            setcolor(NORMAL);
 			Sleep(1000);
-			maxtime--;
+            maxtime--;
         }while(maxtime!=0);
-
-        // Extracted question with option and correct answer from file and stored in 'record' vector
-        // system("CLS");
-        // TODO
-        // Change the color and do decorations here
-        // cout << "Question " << record[0] << ") " << record[1] << '\n';
-
-        // HANDLE console_color = GetStdHandle(STD_OUTPUT_HANDLE);
-        // SetConsoleTextAttribute(console_color, 30);
-
-        // cout << "1) " << record[2] << '\n';
-        // cout << "2) " << record[3] << '\n';
-        // cout << "3) " << record[4] << '\n';
-        // cout << "4) " << record[5] << '\n';
-        // SetConsoleTextAttribute(console_color, 7);
-        // Ask for answer
-        // int ch; ch = 0;
-        // while(ch < 1 || ch > 4){
-        //     cout << "Answer: ";
-        //     cin >> ch;
-        //     if(ch < 1 || ch > 4){
-        //         setcolor(YELLOW);
-        //         CoutCentered("Invalid choice!!\nChoice must be between 1 to 4");
-        //         cout << "Invalid choice!!\nChoice must be between 1 to 4\n";
-        //         setcolor(NORMAL);
-        //         system("PAUSE");
-        //         system("CLS");
-        //         TODO
-        //         Change the color and do decorations here
-        //         cout << "Question " << record[0] << ") " << record[1] << '\n';
-        //         cout << "1) " << record[2] << '\n';
-        //         cout << "2) " << record[3] << '\n';
-        //         cout << "3) " << record[4] << '\n';
-        //         cout << "4) " << record[5] << '\n';
-        //     }
-        // }
-        // if(record[ch+1] == record[6]){
-        //     // Increment the score for correct answer
-        //     curr_score += 10;
-        //     setcolor(GREEN);
-        //     CoutCentered("CORRECT ANSWER :)");
-        //     _getch();
-        //     setcolor(NORMAL);
-        //     system("CLS");
-        // }else{
-        //     setcolor(RED);
-        //     CoutCentered("Wrong Answer :(");
-        //     _getch();   
-        //     setcolor(NORMAL);
-        //     system("CLS");
-        //     break;
-        // }
     }
     
     // TODO: Show score screen now
     system("CLS");
     CoutCentered("YOUR SCORE IS");
     CoutCentered(curr_score);
+    if(curr_score < 100){
+        setcolor(RED);
+        CoutCentered("Work Hard!!!");
+    }else if(curr_score >= 100 && curr_score <= 150){
+        setcolor(YELLOW);
+        CoutCentered("Good, keep working hard!!");
+    }else if(curr_score > 151 && curr_score < 180){
+        setcolor(DARK_CYAN);
+        CoutCentered("Great, keep it up!!");
+    }else{
+        setcolor(LIME);
+        CoutCentered("Excellent!!");
+    }
+    setcolor(NORMAL);
 }
 
 void CoutCentered(string text) {
@@ -212,6 +177,25 @@ void CoutCentered(int n) {
         for (int i = 0; i < newpos; i++) std::cout << " "; // Prints the spaces
     }
     std::cout << n << std::endl; // Prints the text centered :]
+}
+
+// Overloading
+void CoutCentered(string s, int n) {
+    // This function will only center the text if it is less than the length of the console!
+    // Otherwise it will just display it on the console without centering it.
+
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE); // Get the console handle.
+    PCONSOLE_SCREEN_BUFFER_INFO lpScreenInfo = new CONSOLE_SCREEN_BUFFER_INFO(); // Create a pointer to the Screen Info pointing to a temporal screen info.
+    GetConsoleScreenBufferInfo(hConsole, lpScreenInfo); // Saves the console screen info into the lpScreenInfo pointer.
+    COORD NewSBSize = lpScreenInfo->dwSize; // Gets the size of the screen
+    
+    int size = s.size() + 2 + ceil(log10(n));
+
+    if (NewSBSize.X > size) {
+        int newpos = ((NewSBSize.X - size) / 2); // Calculate the number of spaces to center the specific text.
+        for (int i = 0; i < newpos; i++) std::cout << " "; // Prints the spaces
+    }
+    std::cout << s << " : " << n << '\n'; // Prints the text centered :]
 }
 
 int main(){
