@@ -8,25 +8,73 @@ void CoutCentered(string);
 void CoutCentered(int);
 void CoutCentered(string, int);
 
+//enumeration is a user-defined data type
+enum color{ 
+	NONE, DARK_BLUE, GREEN, DARK_CYAN, DARK_RED, PURPLE, DARK_YELLOW, NORMAL, GRAY, BLUE, LIME, CYAN, RED, PINK, YELLOW, WHITE
+};
+
+void setcolor   (color newColor) 
+{
+	//A "handle" is a generic identifier (typically a pointer) used to represent something.
+	SetConsoleTextAttribute( GetStdHandle(STD_OUTPUT_HANDLE), (newColor ) );
+}
+
 class Student{
     public:
-    string name;
+    char name[20];
     int rollno;
 
     Student(){
-        name = "";
+        for(int i = 0; i < 20; i++) name[i]='\0';
         rollno = 0;
     }
 
     void inputDetails(){
-        cout << "Enter Name : "; cin >> name;
         system("CLS");
+        setcolor(BLUE);
+        cout << "Enter First Name : ";
+        cin.getline(name, 20);
+        system("CLS");
+        setcolor(DARK_CYAN);
         cout << "Enter Roll Number : "; cin >> rollno;
         system("CLS");
+        setcolor(NORMAL);
+    }
+
+    void putScore(int score){
+        fstream f("history.csv", ios::in|ios::out|ios::app);
+        for(int i = 0; i < 20; i++){
+            if(name[i] != '\0') f << name[i];
+            else break;
+        }
+        f << ',' << rollno << ',' << score << ',' << '\n';
+        f.close();
     }
 
     void showDetails(){
-        // TODO
+        fstream f;
+        f.open("history.csv", ios::in);
+        cout << "NAME                " << "ROLL NUMBER    " << "SCORE" << '\n';
+        while(!f.eof()){
+            string s;
+            getline(f, s);
+            vector<string> record;
+            int j = 0;
+            for(int i = 0; i < s.size(); i++){
+                if(s[i] == ','){
+                    record.push_back(s.substr(j, i-j));
+                    j = i+1;
+                }
+            }
+            cout << record[0];
+            for(int i = 0; i < 20-record[0].size(); i++) cout << " ";
+            cout << record[1];
+            for(int i = 0; i < 15-record[1].size(); i++) cout << " ";
+            cout << record[2];
+            cout << '\n';
+        }
+        _getch();
+        system("CLS");
     }
 };
 
@@ -39,19 +87,8 @@ void welcome(){
     _getch();
 }
 
-//enumeration is a user-defined data type
-enum color{ 
-	NONE, DARK_BLUE, GREEN, DARK_CYAN, DARK_RED, PURPLE, DARK_YELLOW, NORMAL, GRAY, BLUE, LIME, CYAN, RED, PINK, YELLOW, WHITE
-};
 
-void setcolor   (color newColor) 
-{
-	//A "handle" is a generic identifier (typically a pointer) used to represent something.
-	SetConsoleTextAttribute( GetStdHandle(STD_OUTPUT_HANDLE), (newColor ) );
-}
-
-
-void readFile(){
+int readFile(){
     fstream f("data.csv", ios::in);
 
     // skip the first 1st line from file
@@ -143,6 +180,9 @@ void readFile(){
         CoutCentered("Excellent!!");
     }
     setcolor(NORMAL);
+    _getch();
+    system("CLS");
+    return curr_score;
 }
 
 void CoutCentered(string text) {
@@ -199,7 +239,11 @@ void CoutCentered(string s, int n) {
 }
 
 int main(){
+    Student s;
+    s.inputDetails();
     welcome();
-    readFile();
+    int score = readFile();
+    s.putScore(score);
+    s.showDetails();
     return 0;
 }
