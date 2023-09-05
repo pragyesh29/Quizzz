@@ -10,5 +10,7 @@ This is an interactive console based quizz application. A user can play this gam
 
 ### GLANCE
 <div align="center">
-  <img src="https://github.com/pragyesh29/Quizzz/res/ss.gif" alt="overview">
+  <!-- <img src="https://github.com/pragyesh29/BookHub-App/blob/master/app/src/main/ScreenShots/Dashboard.jpeg" alt="Dashboard" width="98" height="200"> -->
+  <img src="./res/ss.gif" alt="Dashboard">
+  <!-- <img src="https://github.com/pragyesh29/Quizzz/res/ss.gif" alt="overview"> -->
 </div>
